@@ -21,12 +21,22 @@ const handleGenereteNewShortUrl = async (req, res) => {
         visitHistory: []
     });
 
+    return res.render("home", { id: shortId })
     // Returning the generated short ID in the response
-    return res.json({ id: shortId });
+    // return res.json({ id: shortId });
+}
+
+const handleGetAnalytics = async (req, res) => {
+    const shortId = req.params.shortId;
+    const result = await URL.findOne({ shortId })
+    return res.json({
+        totalClicks: result.visitHistory.length,
+        analytics: result.visitHistory
+    })
 }
 
 // Exporting the handleGenereteNewShortUrl function to be used in other files
-module.exports = { handleGenereteNewShortUrl };
+module.exports = { handleGenereteNewShortUrl, handleGetAnalytics };
 
 
 // In JavaScript, when you export a single function or variable from a module without using curly braces, you're making it the default export. However, in your controllers/url.js file, you're already exporting an object with handleGenereteNewShortUrl as a property. This means that to import it in another file using destructuring, you would use curly braces.
